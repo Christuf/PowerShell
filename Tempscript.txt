@@ -1,0 +1,17 @@
+# Check the current version of .NET Framework installed
+$currentVersion = (Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full' -Name Version).Version
+
+# Determine if an update is needed
+$updateNeeded = $false
+if ($currentVersion -lt "4.8.0") {
+    $updateNeeded = $true
+}
+
+# Apply the update if needed
+if ($updateNeeded) {
+    # Download the update
+    Start-BitsTransfer -Source "https://download.microsoft.com/download/9/A/F/9AF2B8B0-2C3D-4D48-B8F1-43C3F9B9E9C1/NDP48-KB3186497-x86-x64-AllOS-ENU.exe" -Destination ".\NDP48-KB3186497-x86-x64-AllOS-ENU.exe"
+
+    # Install the update
+    Start-Process -FilePath ".\NDP48-KB3186497-x86-x64-AllOS-ENU.exe" -ArgumentList "/quiet /norestart" -Wait
+}
